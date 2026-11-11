@@ -1,3 +1,4 @@
+
 // Fake Store API:n osoite.
 const API_URL = "https://fakestoreapi.com/products";
 
@@ -9,77 +10,67 @@ const categorySelect = document.querySelector("#categorySelect");
 const sortSelect = document.querySelector("#sortSelect");
 const resultCount = document.querySelector("#resultCount");
 
-// Tänne tallennetaan API:sta haetut ja sivulla käytettävät tuotteet.
+// Tänne tallennetaan API:sta haetut tuotteet.
 let allProducts = [];
 
 // Lemmikkikaupan esimerkkituotteet.
-// Tuotenimet, kuvaukset ja kuvat ovat itse määriteltyjä.
-// Hinnat ja arvostelut saadaan Fake Store API:sta.
 const petProducts = [
   {
     name: "Premium koiran kuivaruoka",
     category: "koirat",
     description: "Laadukasta täysravintoa koirasi päivittäiseen ruokintaan.",
-    image: "images/dog-food.jpg",
-    icon: "🐶",
+    icon: "🐶"
   },
   {
     name: "Koiran herkulliset makupalat",
     category: "koirat",
     description: "Maukkaita palkitsemisherkkuja yhteisiin hetkiin.",
-    image: "images/dog-food.jpg",
-    icon: "🦴",
+    icon: "🦴"
   },
   {
     name: "Hauska koiran lelu",
     category: "lelut",
     description: "Leikkimiseen ja aktivointiin sopiva koiran lelu.",
-    image: "images/dog-toy.jpg",
-    icon: "🎾",
+    icon: "🎾"
   },
   {
     name: "Kissan täysravinto",
     category: "kissat",
     description: "Maukas ruoka kissan päivittäiseen ruokintaan.",
-    image: "images/cat-food.jpg",
-    icon: "🐱",
+    icon: "🐱"
   },
   {
     name: "Kissan herkkupalat",
     category: "kissat",
     description: "Pieni herkku kissan hemmotteluhetkiin.",
-    image: "images/cat-food.jpg",
-    icon: "🐟",
+    icon: "🐟"
   },
   {
     name: "Kissan leikkipallo",
     category: "lelut",
     description: "Hauskaa tekemistä ja liikuntaa kissalle.",
-    image: "images/cat-toy.jpg",
-    icon: "🧶",
+    icon: "🧶"
   },
   {
     name: "Pehmeä lemmikin peti",
     category: "tarvikkeet",
     description: "Mukava ja pehmeä paikka lemmikin lepohetkiin.",
-    image: "images/pet-bed.jpg",
-    icon: "🛏️",
+    icon: "🛏️"
   },
   {
     name: "Lemmikin ruokakuppi",
     category: "tarvikkeet",
     description: "Käytännöllinen ruokakuppi jokapäiväiseen käyttöön.",
-    image: "images/pet-bed.jpg",
-    icon: "🥣",
-  },
+    icon: "🥣"
+  }
 ];
 
-// Suomenkieliset kategoriat.
+// Kategorioiden suomenkieliset nimet.
 const categoryNames = {
   koirat: "Koirille",
   kissat: "Kissoille",
   lelut: "Lelut",
-  tarvikkeet: "Tarvikkeet",
+  tarvikkeet: "Tarvikkeet"
 };
 
 // Haetaan tuotteet API:sta.
@@ -88,7 +79,7 @@ async function fetchProducts() {
   statusMessage.classList.remove("error");
 
   try {
-    // AJAX-pyyntö Fake Store API:lle.
+    // Lähetetään AJAX-pyyntö Fake Store API:lle.
     const response = await fetch(API_URL);
 
     // Tarkistetaan, onnistuiko pyyntö.
@@ -96,15 +87,15 @@ async function fetchProducts() {
       throw new Error("API-pyyntö epäonnistui: " + response.status);
     }
 
-    // Muutetaan vastaus JSON-muotoon.
+    // Muutetaan API:n vastaus JSON-muotoon.
     const apiProducts = await response.json();
 
-    // Yhdistetään omat esimerkkituotteet API:n hintoihin ja arvosteluihin.
+    // Yhdistetään omat tuotteet API:n hintoihin ja arvosteluihin.
     allProducts = petProducts.map((product, index) => {
       return {
         ...product,
         price: apiProducts[index].price,
-        rating: apiProducts[index].rating,
+        rating: apiProducts[index].rating
       };
     });
 
@@ -112,6 +103,7 @@ async function fetchProducts() {
 
     // Näytetään tuotteet.
     filterAndSortProducts();
+
   } catch (error) {
     statusMessage.textContent =
       "Tuotteiden lataaminen epäonnistui. Yritä myöhemmin uudelleen.";
@@ -129,13 +121,14 @@ function filterAndSortProducts() {
   const sortValue = sortSelect.value;
 
   // Suodatetaan tuotteet hakusanan ja kategorian perusteella.
-  let filteredProducts = allProducts.filter((product) => {
+  let filteredProducts = allProducts.filter(product => {
     const matchesSearch =
       product.name.toLowerCase().includes(searchTerm) ||
       product.description.toLowerCase().includes(searchTerm);
 
     const matchesCategory =
-      selectedCategory === "all" || product.category === selectedCategory;
+      selectedCategory === "all" ||
+      product.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
@@ -143,60 +136,53 @@ function filterAndSortProducts() {
   // Järjestetään tuotteet valitun vaihtoehdon mukaan.
   if (sortValue === "low-high") {
     filteredProducts.sort((a, b) => a.price - b.price);
+
   } else if (sortValue === "high-low") {
     filteredProducts.sort((a, b) => b.price - a.price);
+
   } else if (sortValue === "name") {
-    filteredProducts.sort((a, b) => a.name.localeCompare(b.name, "fi"));
+    filteredProducts.sort((a, b) =>
+      a.name.localeCompare(b.name, "fi")
+    );
   }
 
   renderProducts(filteredProducts);
 }
 
-// Näytetään tuotteet HTML-sivulla.
+// Näytetään tuotteet verkkosivulla.
 function renderProducts(products) {
   productGrid.replaceChildren();
 
-  resultCount.textContent = `Näytetään ${products.length} tuotetta`;
+  resultCount.textContent =
+    `Näytetään ${products.length} tuotetta`;
 
-  // Jos hakutuloksia ei löydy.
+  // Jos tuotteita ei löydy, näytetään ilmoitus.
   if (products.length === 0) {
     const message = document.createElement("p");
+
     message.className = "empty-message";
-    message.textContent = "Tuotteita ei löytynyt. Kokeile toista hakusanaa.";
+    message.textContent =
+      "Tuotteita ei löytynyt. Kokeile toista hakusanaa.";
 
     productGrid.appendChild(message);
     return;
   }
 
   // Luodaan jokaisesta tuotteesta oma tuotekortti.
-  products.forEach((product) => {
+  products.forEach(product => {
     const card = document.createElement("article");
     card.className = "product-card";
 
-    // Tuotekuva.
+    // Tuotteen emoji.
     const imageWrap = document.createElement("div");
     imageWrap.className = "product-image-wrap";
 
-    const image = document.createElement("img");
-    image.className = "product-image";
-    image.src = product.image;
-    image.alt = product.name;
-    image.loading = "lazy";
+    const illustration = document.createElement("div");
+    illustration.className = "product-illustration";
+    illustration.textContent = product.icon;
+    illustration.setAttribute("aria-hidden", "true");
 
-    // Näytetään emoji, jos käyttäjän lisäämää kuvaa ei löydy.
-    image.addEventListener("error", () => {
-      image.remove();
-      imageWrap.classList.add("image-fallback");
-
-      const fallback = document.createElement("span");
-      fallback.className = "fallback-emoji";
-      fallback.textContent = product.icon;
-      fallback.setAttribute("aria-hidden", "true");
-
-      imageWrap.appendChild(fallback);
-    });
-
-    imageWrap.appendChild(image);
+    imageWrap.appendChild(illustration);
 
     // Tuotteen kategoria.
     const category = document.createElement("p");
@@ -213,7 +199,7 @@ function renderProducts(products) {
     description.className = "product-description";
     description.textContent = product.description;
 
-    // Tuotteen hinta.
+    // Tuotteen hinta ja arvostelu.
     const bottom = document.createElement("div");
     bottom.className = "product-bottom";
 
@@ -222,24 +208,45 @@ function renderProducts(products) {
     price.textContent =
       Number(product.price).toFixed(2).replace(".", ",") + " €";
 
-    // API:sta saatu arvostelu.
     const rating = document.createElement("span");
     rating.className = "rating";
     rating.textContent = `★ ${product.rating.rate}`;
 
     bottom.append(price, rating);
 
-    // Lisätään kaikki osat tuotekorttiin.
-    card.append(imageWrap, category, title, description, bottom);
+    // Kootaan tuotekortti.
+    card.append(
+      imageWrap,
+      category,
+      title,
+      description,
+      bottom
+    );
 
     productGrid.appendChild(card);
   });
 }
 
-// Tapahtumankäsittelijät lisätään JavaScriptillä.
+// Lisätään tapahtumankäsittelijät JavaScriptillä.
 searchInput.addEventListener("input", filterAndSortProducts);
 categorySelect.addEventListener("change", filterAndSortProducts);
 sortSelect.addEventListener("change", filterAndSortProducts);
 
-// Käynnistetään API-haku, kun JavaScript latautuu.
+// Käsitellään myös etusivun ja Meistä-osion kuvien virheet.
+document.querySelectorAll(".hero-image img, .about-image img")
+  .forEach(image => {
+    image.addEventListener("error", () => {
+      image.style.display = "none";
+      image.parentElement.classList.add("image-fallback");
+
+      const fallback = document.createElement("span");
+      fallback.className = "fallback-emoji";
+      fallback.textContent = "🐾";
+      fallback.setAttribute("aria-hidden", "true");
+
+      image.parentElement.appendChild(fallback);
+    });
+  });
+
+// Käynnistetään tuotteiden hakeminen.
 fetchProducts();
