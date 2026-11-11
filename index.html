@@ -5,55 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="TassuTori, tuotteita jokaiselle tassulle."
+      content="TassuTori – kaikkea hyvää lemmikillesi. Tutustu lemmikkien ruokiin, leluihin ja tarvikkeisiin."
     />
-    <title>TassuTori, lemmikkikauppa</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
+    <title>TassuTori – kaikkea hyvää lemmikillesi</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/script.js" defer></script>
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#" aria-label="TassuTori etusivu">🐾 TassuTori</a>
-      <p class="tagline">Tuotteita jokaiselle tassulle</p>
+      <a class="logo" href="#home">Tassu<span>Tori.</span></a>
+
+      <nav class="main-nav" aria-label="Päänavigaatio">
+        <a href="#home">Etusivu</a>
+        <a href="#products">Tuotteet</a>
+        <a href="#about">Meistä</a>
+      </nav>
+
+      <a class="header-button" href="#products">Tutustu tuotteisiin</a>
     </header>
 
     <main>
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Tervetuloa ostoksille</p>
-          <h1>Pieniä iloja lemmikkien arkeen</h1>
-          <p>
-            Löydä lemmikkikotiin sopivia tuotteita helposti yhdestä paikasta.
+      <section class="hero" id="home">
+        <div class="hero-content">
+          <p class="eyebrow">HYVÄÄ ELÄMÄÄ KARVAKAVEREILLE</p>
+          <h1>Kaikkea hyvää<br />lemmikillesi.</h1>
+          <p class="hero-text">
+            Löydä suosikit arkeen, leikkiin ja yhteisiin hetkiin. TassuTorista
+            löydät tuotteita elämäsi tärkeimmille tassuttelijoille.
           </p>
-          <a class="hero-button" href="#tuotteet">Tutustu tuotteisiin</a>
+          <a class="primary-button" href="#products"
+            >Tutustu valikoimaan <span>→</span></a
+          >
         </div>
-        <div class="hero-art" aria-hidden="true">🐶<span>🐱</span></div>
+
+        <div class="hero-image">
+          <img
+            src="images/hero-dog.jpg"
+            alt="Koira ulkona"
+            onerror="
+              this.style.display = 'none';
+              this.parentElement.classList.add('image-fallback');
+            "
+          />
+          <span class="fallback-emoji" aria-hidden="true">🐶</span>
+          <div class="hero-sticker">PARASTA<br />LEMMIKEILLE</div>
+        </div>
       </section>
 
-      <section class="shop-section" id="tuotteet">
+      <section class="benefits" aria-label="TassuTorin edut">
+        <article class="benefit">
+          <span class="benefit-icon">🐾</span>
+          <div>
+            <h2>Rakkautta tassuille</h2>
+            <p>Valikoimaa lemmikkien arkeen.</p>
+          </div>
+        </article>
+
+        <article class="benefit">
+          <span class="benefit-icon">💛</span>
+          <div>
+            <h2>Valikoituja suosikkeja</h2>
+            <p>Ruokaa, leluja ja tarvikkeita.</p>
+          </div>
+        </article>
+
+        <article class="benefit">
+          <span class="benefit-icon">🐕</span>
+          <div>
+            <h2>Kaikille karvakavereille</h2>
+            <p>Koirille ja kissoille.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="products-section" id="products">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Tassutorin valikoima</p>
-            <h2>Tuotteet</h2>
+            <p class="eyebrow">TASSUTORIN VALIKOIMA</p>
+            <h2>Löydä uusi suosikki.</h2>
+            <p class="section-description">
+              Tutustu tuotteisiin ja löydä jotain kivaa lemmikillesi.
+            </p>
           </div>
-          <p class="api-note">Tuotteet haetaan Fake Store API:sta.</p>
         </div>
 
-        <div class="filters">
+        <div class="product-controls">
           <label class="search-label" for="searchInput">
-            Hae tuotetta
+            Hae tuotteita
             <input
-              id="searchInput"
               type="search"
-              placeholder="Kirjoita hakusana..."
-              autocomplete="off"
+              id="searchInput"
+              placeholder="Esim. koiranruoka..."
             />
           </label>
 
           <label for="categorySelect">
             Kategoria
             <select id="categorySelect">
-              <option value="all">Kaikki kategoriat</option>
+              <option value="all">Kaikki tuotteet</option>
+              <option value="koirat">Koirille</option>
+              <option value="kissat">Kissoille</option>
+              <option value="lelut">Lelut</option>
+              <option value="tarvikkeet">Tarvikkeet</option>
             </select>
           </label>
 
@@ -61,26 +114,55 @@
             Järjestä
             <select id="sortSelect">
               <option value="default">Oletusjärjestys</option>
-              <option value="low-high">Hinta: edullisimmasta</option>
-              <option value="high-low">Hinta: kalleimmasta</option>
-              <option value="name">Nimi: A-Ö</option>
+              <option value="low-high">Halvin ensin</option>
+              <option value="high-low">Kallein ensin</option>
+              <option value="name">Nimen mukaan</option>
             </select>
           </label>
         </div>
 
-        <p id="resultCount" class="result-count" aria-live="polite"></p>
-        <div id="statusMessage" class="status-message" role="status">
+        <p id="statusMessage" class="status-message" role="status">
           Haetaan tuotteita...
-        </div>
+        </p>
+
+        <p id="resultCount" class="result-count"></p>
+
         <div id="productGrid" class="product-grid"></div>
+      </section>
+
+      <section class="about-section" id="about">
+        <div class="about-image">
+          <img
+            src="images/pet-bed.jpg"
+            alt="Lemmikki lepää pehmeällä alustalla"
+            onerror="
+              this.style.display = 'none';
+              this.parentElement.classList.add('image-fallback');
+            "
+          />
+          <span class="fallback-emoji" aria-hidden="true">🐱</span>
+        </div>
+
+        <div class="about-content">
+          <p class="eyebrow">MOIKKA, ME OLEMME TASSUTORI</p>
+          <h2>Pienet tassut ansaitsevat paljon hyvää.</h2>
+          <p>
+            TassuTori on kuvitteellinen lemmikkitarvikkeiden verkkokauppa, jonka
+            valikoimasta löydät tuotteita lemmikkien ruokintaan, leikkiin ja
+            hyvinvointiin.
+          </p>
+          <a class="primary-button" href="#products"
+            >Katso tuotteet <span>→</span></a
+          >
+        </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <p><strong>🐾 TassuTori</strong>harjoitustyö</p>
-      <p>
-        Tuotetiedot haetaan Fake Store API -rajapinnasta. Sivusto on
-        opiskeluprojekti, ei oikea verkkokauppa.
+      <a class="logo footer-logo" href="#home">Tassu<span>Tori.</span></a>
+      <p>Kaikkea hyvää lemmikillesi. 🐾</p>
+      <p class="copyright">
+        © 2026 TassuTori – kuvitteellinen verkkokauppaprojekti
       </p>
     </footer>
   </body>
