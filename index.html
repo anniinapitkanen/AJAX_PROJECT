@@ -1,2 +1,87 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="TassuTori, tuotteita jokaiselle tassulle."
+    />
+    <title>TassuTori, lemmikkikauppa</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="TassuTori etusivu">🐾 TassuTori</a>
+      <p class="tagline">Tuotteita jokaiselle tassulle</p>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Tervetuloa ostoksille</p>
+          <h1>Pieniä iloja lemmikkien arkeen</h1>
+          <p>
+            Löydä lemmikkikotiin sopivia tuotteita helposti yhdestä paikasta.
+          </p>
+          <a class="hero-button" href="#tuotteet">Tutustu tuotteisiin</a>
+        </div>
+        <div class="hero-art" aria-hidden="true">🐶<span>🐱</span></div>
+      </section>
+
+      <section class="shop-section" id="tuotteet">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Tassutorin valikoima</p>
+            <h2>Tuotteet</h2>
+          </div>
+          <p class="api-note">Tuotteet haetaan Fake Store API:sta.</p>
+        </div>
+
+        <div class="filters">
+          <label class="search-label" for="searchInput">
+            Hae tuotetta
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Kirjoita hakusana..."
+              autocomplete="off"
+            />
+          </label>
+
+          <label for="categorySelect">
+            Kategoria
+            <select id="categorySelect">
+              <option value="all">Kaikki kategoriat</option>
+            </select>
+          </label>
+
+          <label for="sortSelect">
+            Järjestä
+            <select id="sortSelect">
+              <option value="default">Oletusjärjestys</option>
+              <option value="low-high">Hinta: edullisimmasta</option>
+              <option value="high-low">Hinta: kalleimmasta</option>
+              <option value="name">Nimi: A–Ö</option>
+            </select>
+          </label>
+        </div>
+
+        <p id="resultCount" class="result-count" aria-live="polite"></p>
+        <div id="statusMessage" class="status-message" role="status">
+          Haetaan tuotteita...
+        </div>
+        <div id="productGrid" class="product-grid"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p><strong>🐾 TassuTori</strong> – harjoitustyö</p>
+      <p>
+        Tuotetiedot haetaan Fake Store API -rajapinnasta. Sivusto on
+        opiskeluprojekti, ei oikea verkkokauppa.
+      </p>
+    </footer>
+  </body>
+</html>
