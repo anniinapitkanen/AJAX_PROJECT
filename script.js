@@ -1,7 +1,7 @@
-// Fake Store API:n osoite, josta tuotteet haetaan.
+// Fake Store API:n osoite.
 const API_URL = "https://fakestoreapi.com/products";
 
-// Haetaan sivun HTML-elementit talteen muuttujiksi.
+// Haetaan sivun HTML-elementit.
 const productGrid = document.querySelector("#productGrid");
 const statusMessage = document.querySelector("#statusMessage");
 const searchInput = document.querySelector("#searchInput");
@@ -9,75 +9,130 @@ const categorySelect = document.querySelector("#categorySelect");
 const sortSelect = document.querySelector("#sortSelect");
 const resultCount = document.querySelector("#resultCount");
 
-// Tähän muuttujaan tallennetaan API:sta saatu tuotetaulukko.
+// Tänne tallennetaan API:sta haetut ja sivulla käytettävät tuotteet.
 let allProducts = [];
 
-// Muutetaan API:n englanninkieliset kategoriat suomeksi.
+// Lemmikkikaupan esimerkkituotteet.
+// Tuotenimet, kuvaukset ja kuvat ovat itse määriteltyjä.
+// Hinnat ja arvostelut saadaan Fake Store API:sta.
+const petProducts = [
+  {
+    name: "Premium koiran kuivaruoka",
+    category: "koirat",
+    description: "Laadukasta täysravintoa koirasi päivittäiseen ruokintaan.",
+    image: "images/dog-food.jpg",
+    icon: "🐶",
+  },
+  {
+    name: "Koiran herkulliset makupalat",
+    category: "koirat",
+    description: "Maukkaita palkitsemisherkkuja yhteisiin hetkiin.",
+    image: "images/dog-food.jpg",
+    icon: "🦴",
+  },
+  {
+    name: "Hauska koiran lelu",
+    category: "lelut",
+    description: "Leikkimiseen ja aktivointiin sopiva koiran lelu.",
+    image: "images/dog-toy.jpg",
+    icon: "🎾",
+  },
+  {
+    name: "Kissan täysravinto",
+    category: "kissat",
+    description: "Maukas ruoka kissan päivittäiseen ruokintaan.",
+    image: "images/cat-food.jpg",
+    icon: "🐱",
+  },
+  {
+    name: "Kissan herkkupalat",
+    category: "kissat",
+    description: "Pieni herkku kissan hemmotteluhetkiin.",
+    image: "images/cat-food.jpg",
+    icon: "🐟",
+  },
+  {
+    name: "Kissan leikkipallo",
+    category: "lelut",
+    description: "Hauskaa tekemistä ja liikuntaa kissalle.",
+    image: "images/cat-toy.jpg",
+    icon: "🧶",
+  },
+  {
+    name: "Pehmeä lemmikin peti",
+    category: "tarvikkeet",
+    description: "Mukava ja pehmeä paikka lemmikin lepohetkiin.",
+    image: "images/pet-bed.jpg",
+    icon: "🛏️",
+  },
+  {
+    name: "Lemmikin ruokakuppi",
+    category: "tarvikkeet",
+    description: "Käytännöllinen ruokakuppi jokapäiväiseen käyttöön.",
+    image: "images/pet-bed.jpg",
+    icon: "🥣",
+  },
+];
+
+// Suomenkieliset kategoriat.
 const categoryNames = {
-  "men's clothing": "Miesten vaatteet",
-  "women's clothing": "Naisten vaatteet",
-  jewelery: "Korut",
-  electronics: "Elektroniikka",
+  koirat: "Koirille",
+  kissat: "Kissoille",
+  lelut: "Lelut",
+  tarvikkeet: "Tarvikkeet",
 };
 
-// Haetaan tuotteet palvelimelta fetch()-toiminnolla.
+// Haetaan tuotteet API:sta.
 async function fetchProducts() {
-  statusMessage.hidden = false;
+  statusMessage.textContent = "Haetaan tuotteita...";
   statusMessage.classList.remove("error");
-  statusMessage.textContent = "Haetaan tuotteita palvelimelta...";
 
   try {
-    // fetch lähettää HTTP-pyynnön API-osoitteeseen.
+    // AJAX-pyyntö Fake Store API:lle.
     const response = await fetch(API_URL);
 
-    // Tarkistetaan, onnistuiko palvelimen vastaus.
+    // Tarkistetaan, onnistuiko pyyntö.
     if (!response.ok) {
-      throw new Error("Palvelin palautti virheen: " + response.status);
+      throw new Error("API-pyyntö epäonnistui: " + response.status);
     }
 
-    // Muutetaan JSON-vastaus JavaScript-taulukoksi.
-    allProducts = await response.json();
+    // Muutetaan vastaus JSON-muotoon.
+    const apiProducts = await response.json();
 
-    // Luodaan kategoriavalikon vaihtoehdot saadun datan perusteella.
-    populateCategories(allProducts);
+    // Yhdistetään omat esimerkkituotteet API:n hintoihin ja arvosteluihin.
+    allProducts = petProducts.map((product, index) => {
+      return {
+        ...product,
+        price: apiProducts[index].price,
+        rating: apiProducts[index].rating,
+      };
+    });
 
-    // Näytetään kaikki tuotteet ensimmäisellä latauskerralla.
-    renderProducts(allProducts);
-    statusMessage.hidden = true;
+    statusMessage.textContent = "";
+
+    // Näytetään tuotteet.
+    filterAndSortProducts();
   } catch (error) {
-    // Näytetään virheilmoitus, jos haku epäonnistuu.
-    statusMessage.hidden = false;
-    statusMessage.classList.add("error");
     statusMessage.textContent =
-      "Tuotteiden hakeminen epäonnistui. Tarkista internet-yhteys ja yritä ladata sivu uudelleen. (" +
-      error.message +
-      ")";
+      "Tuotteiden lataaminen epäonnistui. Yritä myöhemmin uudelleen.";
 
-    console.error("API-haku epäonnistui:", error);
+    statusMessage.classList.add("error");
+
+    console.error("Tuotteiden haussa tapahtui virhe:", error);
   }
 }
 
-// Täytetään kategoriavalikko API:n palauttamilla kategorioilla.
-function populateCategories(products) {
-  const categories = [...new Set(products.map((product) => product.category))];
-
-  categories.forEach((category) => {
-    const option = document.createElement("option");
-    option.value = category;
-    option.textContent = categoryNames[category] || category;
-    categorySelect.appendChild(option);
-  });
-}
-
-// Suodatetaan ja järjestetään tuotteet käyttäjän valintojen perusteella.
+// Suodatetaan ja järjestetään tuotteet käyttäjän valintojen mukaan.
 function filterAndSortProducts() {
-  const searchTerm = searchInput.value.trim().toLowerCase();
+  const searchTerm = searchInput.value.toLowerCase().trim();
   const selectedCategory = categorySelect.value;
   const sortValue = sortSelect.value;
 
   // Suodatetaan tuotteet hakusanan ja kategorian perusteella.
   let filteredProducts = allProducts.filter((product) => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm);
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchTerm) ||
+      product.description.toLowerCase().includes(searchTerm);
 
     const matchesCategory =
       selectedCategory === "all" || product.category === selectedCategory;
@@ -85,68 +140,80 @@ function filterAndSortProducts() {
     return matchesSearch && matchesCategory;
   });
 
-  // Järjestetään tuotteet käyttäjän valinnan mukaan.
+  // Järjestetään tuotteet valitun vaihtoehdon mukaan.
   if (sortValue === "low-high") {
     filteredProducts.sort((a, b) => a.price - b.price);
   } else if (sortValue === "high-low") {
     filteredProducts.sort((a, b) => b.price - a.price);
   } else if (sortValue === "name") {
-    filteredProducts.sort((a, b) => a.title.localeCompare(b.title));
+    filteredProducts.sort((a, b) => a.name.localeCompare(b.name, "fi"));
   }
 
   renderProducts(filteredProducts);
 }
 
-// Luodaan tuotekortit ja lisätään ne sivulle.
+// Näytetään tuotteet HTML-sivulla.
 function renderProducts(products) {
   productGrid.replaceChildren();
 
-  resultCount.textContent = "Näytetään " + products.length + " tuotetta";
+  resultCount.textContent = `Näytetään ${products.length} tuotetta`;
 
-  // Näytetään ilmoitus, jos tuotteita ei löydy.
+  // Jos hakutuloksia ei löydy.
   if (products.length === 0) {
-    const emptyMessage = document.createElement("p");
-    emptyMessage.className = "empty-message";
-    emptyMessage.textContent =
-      "Hakuehdoilla ei löytynyt tuotteita. Kokeile toista hakusanaa tai kategoriaa.";
+    const message = document.createElement("p");
+    message.className = "empty-message";
+    message.textContent = "Tuotteita ei löytynyt. Kokeile toista hakusanaa.";
 
-    productGrid.appendChild(emptyMessage);
+    productGrid.appendChild(message);
     return;
   }
 
+  // Luodaan jokaisesta tuotteesta oma tuotekortti.
   products.forEach((product) => {
-    // Luodaan jokaiselle tuotteelle oma kortti.
     const card = document.createElement("article");
     card.className = "product-card";
 
-    // Luodaan tuotteen kuvan sisältävä alue.
+    // Tuotekuva.
     const imageWrap = document.createElement("div");
     imageWrap.className = "product-image-wrap";
 
     const image = document.createElement("img");
     image.className = "product-image";
     image.src = product.image;
-    image.alt = product.title;
+    image.alt = product.name;
     image.loading = "lazy";
+
+    // Näytetään emoji, jos käyttäjän lisäämää kuvaa ei löydy.
+    image.addEventListener("error", () => {
+      image.remove();
+      imageWrap.classList.add("image-fallback");
+
+      const fallback = document.createElement("span");
+      fallback.className = "fallback-emoji";
+      fallback.textContent = product.icon;
+      fallback.setAttribute("aria-hidden", "true");
+
+      imageWrap.appendChild(fallback);
+    });
 
     imageWrap.appendChild(image);
 
-    // Luodaan tuotteen kategoria.
+    // Tuotteen kategoria.
     const category = document.createElement("p");
     category.className = "product-category";
-    category.textContent = categoryNames[product.category] || product.category;
+    category.textContent = categoryNames[product.category];
 
-    // Luodaan tuotteen nimi.
+    // Tuotteen nimi.
     const title = document.createElement("h3");
     title.className = "product-title";
-    title.textContent = product.title;
+    title.textContent = product.name;
 
-    // Luodaan tuotteen kuvaus.
+    // Tuotteen kuvaus.
     const description = document.createElement("p");
     description.className = "product-description";
     description.textContent = product.description;
 
-    // Luodaan tuotteen hinta ja arvostelu.
+    // Tuotteen hinta.
     const bottom = document.createElement("div");
     bottom.className = "product-bottom";
 
@@ -155,26 +222,24 @@ function renderProducts(products) {
     price.textContent =
       Number(product.price).toFixed(2).replace(".", ",") + " €";
 
+    // API:sta saatu arvostelu.
     const rating = document.createElement("span");
     rating.className = "rating";
-    rating.textContent =
-      "★ " + product.rating.rate + " (" + product.rating.count + ")";
+    rating.textContent = `★ ${product.rating.rate}`;
 
     bottom.append(price, rating);
 
-    // Lisätään kaikki tuotteen osat tuotekorttiin.
+    // Lisätään kaikki osat tuotekorttiin.
     card.append(imageWrap, category, title, description, bottom);
 
-    // Lisätään valmis tuotekortti sivulle.
     productGrid.appendChild(card);
   });
 }
 
-// Lisätään tapahtumankäsittelijät dynaamisesti JavaScriptillä.
-// HTML-elementteihin ei tarvitse kirjoittaa onclick-attribuutteja.
+// Tapahtumankäsittelijät lisätään JavaScriptillä.
 searchInput.addEventListener("input", filterAndSortProducts);
 categorySelect.addEventListener("change", filterAndSortProducts);
 sortSelect.addEventListener("change", filterAndSortProducts);
 
-// Käynnistetään API-haku, kun JavaScript-tiedosto suoritetaan.
+// Käynnistetään API-haku, kun JavaScript latautuu.
 fetchProducts();
