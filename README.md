@@ -26,7 +26,7 @@ Olin toisella kurssilla tehnyt Figmalla tämmöisen hyväntekeväisyys sivuston,
 
 - **Julkaistu sovellus:** [https://anniinapitkanen.github.io/AJAX_PROJECT/]
 - **GitHub-repositorio:** [https://github.com/anniinapitkanen/AJAX_PROJECT/tree/main]
-- **Projektin videoesittely:** [Lisää tähän videon osoite]
+- **Projektin videoesittely:** [https://youtu.be/YmLiNTpcf-E]
 
 ## Tietoja sovelluksesta
 
