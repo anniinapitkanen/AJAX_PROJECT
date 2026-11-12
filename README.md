@@ -62,11 +62,7 @@ Sovelluksessa hyödynnetään Fake Store API -rajapintaa. Rajapinnasta haetaan t
 
 ## Kuvakaappaukset
 
-Lisää tähän vähintään yksi kuvakaappaus valmiista TassuTori-verkkosovelluksesta.
-
-Esimerkiksi:
-
-`![TassuTori etusivu](images/screenshot.png)`
+![TassuTorin etusivu](images/Etusivu.png)
 
 ## Tunnetut virheet / puutteet
 
