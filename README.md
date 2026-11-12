@@ -18,7 +18,7 @@ TassuTori on kuvitteellinen lemmikkieläintarvikkeisiin keskittyvä verkkokauppa
 
 ### Rautalankamalli / luonnos
 
-Lisää tähän kuva TassuTorin suunnitteluvaiheen rautalankamallista.
+(images/Etusivu.png)
 
 ## Verkkolinkit
 
