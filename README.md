@@ -86,7 +86,7 @@ Projektin aikana opin lisää HTML:n, CSS:n ja JavaScriptin yhteistyöstä sekä
 
 ## Lähteet ja kiitokset
 
-- [Fake Store API – Products](https://fakestoreapi.com/products)
+- [Fake Store API](https://fakestoreapi.com/)
 - [MDN Web Docs – Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
 - [MDN Web Docs – addEventListener()](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)
 - [MDN Web Docs – createElement()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement)
