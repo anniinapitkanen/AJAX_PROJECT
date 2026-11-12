@@ -18,6 +18,8 @@ TassuTori on kuvitteellinen lemmikkieläintarvikkeisiin keskittyvä verkkokauppa
 
 ### Rautalankamalli / luonnos
 
+Olin toisella kurssilla tehnyt Figmalla tämmöisen hyväntekeväisyys sivuston, joten halusin tehdä tämän projektin sen pohjalta, joten käytin sitä luonnoksena ja tein sivuston sen pohjalta.
+
 ![TassuTorin rautalankamalli](images/Rautalanka.png)
 
 ## Verkkolinkit
