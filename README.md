@@ -23,7 +23,7 @@ TassuTori on kuvitteellinen lemmikkieläintarvikkeisiin keskittyvä verkkokauppa
 ## Verkkolinkit
 
 - **Julkaistu sovellus:** [https://anniinapitkanen.github.io/AJAX_PROJECT/]
-- **GitHub-repositorio:** [Lisää tähän repositorion osoite]
+- **GitHub-repositorio:** [https://github.com/anniinapitkanen/AJAX_PROJECT/tree/main]
 - **Projektin videoesittely:** [Lisää tähän videon osoite]
 
 ## Tietoja sovelluksesta
